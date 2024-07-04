@@ -24,7 +24,7 @@ instances {
   prototype: "/main/player.go"
   position {
     x: 512.0
-    y: 384.0
+    y: 634.0
     z: 1.0
   }
   rotation {
