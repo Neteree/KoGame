@@ -1,4 +1,4 @@
-sound: "/assets/player_sounds/phaseJump1.ogg"
+sound: "/assets/sounds/footstep_wood_000.ogg"
 looping: 0
 group: "master"
 gain: 1.0

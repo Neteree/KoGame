@@ -1,0 +1,12 @@
+function on_message(self, message_id, message, sender)
+	if message_id == hash("update_gui") then
+		gui.set_text(gui.get_node("score"), "SCORE: " .. message.score)
+		gui.set_text(gui.get_node("objective_gem_colour"), message.objective_gem_colour)
+	end
+	
+	if message_id == hash("win") then
+		gui.set_visible(gui.get_node("game_over"), true)
+		gui.set_visible(gui.get_node("objective_gem_colour"), false)
+	end
+end
+
