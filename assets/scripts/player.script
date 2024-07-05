@@ -9,7 +9,12 @@ function init(self)
 end
 
 function fixed_update(self, dt)
-	self.velocity.y = self.velocity.y + GRAVITY
+	self.velocity.y = math.max(self.velocity.y + GRAVITY)
+
+	if self.velocity.y < -1280 then
+		self.velocity.y = -920
+	end
+	
 	update_position(self.velocity * dt)
 end
 
