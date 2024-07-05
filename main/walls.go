@@ -1,6 +1,6 @@
 components {
   id: "tiles"
-  component: "/assets/tiles/tiles.tilemap"
+  component: "/assets/tiles/walls.tilemap"
   position {
     x: 0.0
     y: 0.0
