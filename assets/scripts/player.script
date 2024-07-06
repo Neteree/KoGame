@@ -20,27 +20,8 @@ function init(self)
 	self.current_jump_amount = 0
 	self.score = 0
 	self.game_over = false
-	
 	math.randomseed(os.time())
-	self.objective_gem_id = GEM_IDS[math.random(#GEM_IDS)]
-	self.objective_gem_colour = GEM_COLOURS[math.random(#GEM_COLOURS)]
-	local other_gem_colour = GEM_COLOURS[math.random(#GEM_COLOURS)]
-
-	while self.objective_gem_colour == other_gem_colour do
-		other_gem_colour = GEM_COLOURS[math.random(#GEM_COLOURS)]
-	end
-	
-	if self.objective_gem_id == GEM_IDS[1] then
-		msg.post(GEM_IDS[2], other_gem_colour)
-	else
-		msg.post(GEM_IDS[1], other_gem_colour)
-	end
-	
-	msg.post(self.objective_gem_id, self.objective_gem_colour)
-	msg.post("/gui#gui", "update_gui", {
-		score = self.score,
-		objective_gem_colour = self.objective_gem_colour
-	})
+	setup_gems(self)
 	msg.post("#", "acquire_input_focus")
 end
 
@@ -57,7 +38,7 @@ function fixed_update(self, dt)
 	end
 
 	if go.get_position().y < 0 then
-		go.set_position(vmath.vector3(512, 384, 1))
+		reset_position()
 	end
 
 	if self.score >= 10 then
@@ -92,32 +73,8 @@ function on_message(self, message_id, message, sender)
 			objective_gem_colour = self.objective_gem_colour
 		})
 
-
-		-- This needs to be refactored and it is just a direct copy and
-		-- paste of what I wrote before so I will need to create a function for it
-		-- at the very least.
-		self.objective_gem_id = GEM_IDS[math.random(#GEM_IDS)]
-		self.objective_gem_colour = GEM_COLOURS[math.random(#GEM_COLOURS)]
-		local other_gem_colour = GEM_COLOURS[math.random(#GEM_COLOURS)]
-
-		while self.objective_gem_colour == other_gem_colour do
-			other_gem_colour = GEM_COLOURS[math.random(#GEM_COLOURS)]
-		end
-
-		if self.objective_gem_id == GEM_IDS[1] then
-			msg.post(GEM_IDS[2], other_gem_colour)
-		else
-			msg.post(GEM_IDS[1], other_gem_colour)
-		end
-
-		msg.post(self.objective_gem_id, self.objective_gem_colour)
-		msg.post("/gui#gui", "update_gui", {
-			score = self.score,
-			objective_gem_colour = self.objective_gem_colour
-		})
-
-		
-		go.set_position(vmath.vector3(512, 384, 1))
+		setup_gems(self)
+		reset_position()
 	end
 	
 	if message_id == hash("contact_point_response") and message.normal.y == 1 then
@@ -165,4 +122,30 @@ function travel(self, velocity_x, animation_id)
 	if not self.is_falling then
 		sprite.play_flipbook("#sprite", animation_id)
 	end
+end
+
+function setup_gems(self)
+	self.objective_gem_id = GEM_IDS[math.random(#GEM_IDS)]
+	self.objective_gem_colour = GEM_COLOURS[math.random(#GEM_COLOURS)]
+	local other_gem_colour = GEM_COLOURS[math.random(#GEM_COLOURS)]
+
+	while self.objective_gem_colour == other_gem_colour do
+		other_gem_colour = GEM_COLOURS[math.random(#GEM_COLOURS)]
+	end
+
+	if self.objective_gem_id == GEM_IDS[1] then
+		msg.post(GEM_IDS[2], other_gem_colour)
+	else
+		msg.post(GEM_IDS[1], other_gem_colour)
+	end
+
+	msg.post(self.objective_gem_id, self.objective_gem_colour)
+	msg.post("/gui#gui", "update_gui", {
+		score = self.score,
+		objective_gem_colour = self.objective_gem_colour
+	})
+end
+
+function reset_position()
+	go.set_position(vmath.vector3(512, 384, 1))
 end
